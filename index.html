@@ -56,6 +56,20 @@ th {
   color: red;
   font-weight: bold;
 }
+
+.guia {
+  margin-top: 20px;
+}
+
+.guia a {
+  display: inline-block;
+  padding: 12px 18px;
+  background: #34a853;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
 </style>
 </head>
 
@@ -74,6 +88,8 @@ th {
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyLlFAoGZsESPxzNCWHY5FOtzP0dpCMf03jqIJWalZdzVs8L3-zgCJE0QkCxObXz7YT/exec";
+
+const LINK_GUIA = "https://drive.google.com/file/d/1S8Tpwubt-P0L84ADLuAf9dBf4aLe_8M5/view";
 
 function consultar() {
   const ra = document.getElementById("ra").value;
@@ -119,6 +135,16 @@ function consultar() {
         });
 
         html += `</table>`;
+
+        // 🔥 BOTÃO DO GUIA (NOVO)
+        html += `
+          <div class="guia">
+            <p><strong>Como enviar seus documentos?</strong></p>
+            <a href="${LINK_GUIA}" target="_blank">
+              📄 Ver passo a passo
+            </a>
+          </div>
+        `;
       }
 
       document.getElementById("resultado").innerHTML = html;
