@@ -63,7 +63,7 @@ th {
 
 <div class="card">
   <h2>Centro Universitário Fundação de Ensino Octávio Bastos - UNIFEOB</h2>
-  <p>Consulta de Documentos Pendentes</p>
+  <p>Consulta de Documentos</p>
 
   <input id="ra" placeholder="Digite seu RA">
   <br>
@@ -86,11 +86,15 @@ function consultar() {
   document.getElementById("resultado").innerHTML = "Carregando...";
 
   fetch(API + "?ra=" + ra)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("Erro na API");
+      return res.json();
+    })
     .then(data => {
 
       if (data.erro) {
-        document.getElementById("resultado").innerHTML = "<p>" + data.erro + "</p>";
+        document.getElementById("resultado").innerHTML =
+          "<p style='color:red;'>" + data.erro + "</p>";
         return;
       }
 
@@ -99,12 +103,10 @@ function consultar() {
         <p><strong>Curso:</strong> ${data.curso}</p>
       `;
 
-      if (data.pendencias.length === 0) {
+      if (!data.pendencias || data.pendencias.length === 0) {
         html += `<p style="color:green;"><strong>✅ Nenhuma pendência</strong></p>`;
       } else {
-
         html += `<p class="pendente">⚠️ Pendências encontradas:</p>`;
-
         html += `<table>
           <tr><th>Documento</th><th>Status</th></tr>
         `;
@@ -116,10 +118,15 @@ function consultar() {
           </tr>`;
         });
 
-        html += "</table>";
+        html += `</table>`;
       }
 
       document.getElementById("resultado").innerHTML = html;
+    })
+    .catch(err => {
+      document.getElementById("resultado").innerHTML =
+        "<p style='color:red;'>Erro ao consultar. Verifique a API.</p>";
+      console.error(err);
     });
 }
 </script>
