@@ -57,13 +57,19 @@ th {
   font-weight: bold;
 }
 
-.guia {
-  margin-top: 20px;
+.rodape {
+  margin-top: 25px;
+  text-align: left;
+  font-size: 13px;
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 8px;
 }
 
 .guia a {
   display: inline-block;
-  padding: 12px 18px;
+  margin-top: 10px;
+  padding: 10px 15px;
   background: #34a853;
   color: white;
   text-decoration: none;
@@ -135,17 +141,31 @@ function consultar() {
         });
 
         html += `</table>`;
+      }
 
-        // 🔥 BOTÃO DO GUIA (NOVO)
-        html += `
+      // 🔥 RODAPÉ (SEMPRE APARECE)
+      html += `
+        <div class="rodape">
+
+          <strong>📄 Envio de documentos:</strong>
           <div class="guia">
-            <p><strong>Como enviar seus documentos?</strong></p>
             <a href="${LINK_GUIA}" target="_blank">
-              📄 Ver passo a passo
+              Ver passo a passo
             </a>
           </div>
-        `;
-      }
+
+          <br>
+
+          <strong>Observações importantes:</strong><br><br>
+
+          • Ingresso por vestibular/ENEM: apresentar apenas o Histórico do Ensino Médio.<br><br>
+
+          • Ingresso por transferência: apresentar o Histórico do Ensino Médio + Histórico da instituição de origem.<br><br>
+
+          • Ingresso por 2ª graduação: apresentar o Diploma do Ensino Superior + Histórico do Ensino Superior.
+
+        </div>
+      `;
 
       document.getElementById("resultado").innerHTML = html;
     })
