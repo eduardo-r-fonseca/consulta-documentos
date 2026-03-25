@@ -66,10 +66,14 @@ th {
   border-radius: 8px;
 }
 
-.guia a {
+.centralizado {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.guia-btn {
   display: inline-block;
-  margin-top: 10px;
-  padding: 10px 15px;
+  padding: 12px 18px;
   background: #34a853;
   color: white;
   text-decoration: none;
@@ -143,18 +147,18 @@ function consultar() {
         html += `</table>`;
       }
 
-      // 🔥 RODAPÉ (SEMPRE APARECE)
+      // 🔥 RODAPÉ AJUSTADO
       html += `
         <div class="rodape">
 
-          <strong>📄 Envio de documentos:</strong>
-          <div class="guia">
-            <a href="${LINK_GUIA}" target="_blank">
-              Ver passo a passo
+          <div class="centralizado">
+            <strong>Quer saber como enviar os documentos?</strong><br><br>
+            <a href="${LINK_GUIA}" target="_blank" class="guia-btn">
+              📄 Ver passo a passo
             </a>
           </div>
 
-          <br>
+          <br><br>
 
           <strong>Observações importantes:</strong><br><br>
 
