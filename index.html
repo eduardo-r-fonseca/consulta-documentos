@@ -51,13 +51,18 @@ td, th {
 th {
   background: #eee;
 }
+
+.pendente {
+  color: red;
+  font-weight: bold;
+}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-  <h2>Centro Univesitário Fundação de Ensino Octávio Bastos - UNIFEOB</h2>
+  <h2>Centro Universitário FundaÇÃO de Ensino Octávio Bastos - UNIFEOB</h2>
   <p>Consulta de Documentos</p>
 
   <input id="ra" placeholder="Digite seu RA">
@@ -69,18 +74,6 @@ th {
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxm-3MFgLqcD8agXxFSsNnLiJaeLan4wVBx33eWcoQmefALoKBoqMAIr1zIO3aNQMCt/exec";
-
-function formatar(status) {
-  if (!status) return "";
-  status = status.toUpperCase();
-
-  if (status === "OK") return "✅ OK";
-  if (status === "PENDENTE") return "❌ PENDENTE";
-  if (status === "AJUSTADO") return "⚠️ AJUSTADO";
-  if (status === "ISENTO") return "➖ ISENTO";
-
-  return status;
-}
 
 function consultar() {
   const ra = document.getElementById("ra").value;
@@ -102,18 +95,29 @@ function consultar() {
       }
 
       let html = `
-        <p><strong>${data.nome}</strong></p>
-        <p>${data.curso}</p>
-
-        <table>
-          <tr><th>Documento</th><th>Status</th></tr>
+        <p><strong>RA:</strong> ${data.ra}</p>
+        <p><strong>Curso:</strong> ${data.curso}</p>
       `;
 
-      data.documentos.forEach(d => {
-        html += `<tr><td>${d.nome}</td><td>${formatar(d.status)}</td></tr>`;
-      });
+      if (data.pendencias.length === 0) {
+        html += `<p style="color:green;"><strong>✅ Nenhuma pendência</strong></p>`;
+      } else {
 
-      html += "</table>";
+        html += `<p class="pendente">⚠️ Pendências encontradas:</p>`;
+
+        html += `<table>
+          <tr><th>Documento</th><th>Status</th></tr>
+        `;
+
+        data.pendencias.forEach(d => {
+          html += `<tr>
+            <td>${d.nome}</td>
+            <td class="pendente">${d.status}</td>
+          </tr>`;
+        });
+
+        html += "</table>";
+      }
 
       document.getElementById("resultado").innerHTML = html;
     });
