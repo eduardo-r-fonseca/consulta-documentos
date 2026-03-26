@@ -57,6 +57,12 @@ th {
   font-weight: bold;
 }
 
+.erro {
+  color: red;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
 .rodape {
   margin-top: 25px;
   text-align: left;
@@ -101,6 +107,31 @@ const API = "https://script.google.com/macros/s/AKfycbyLlFAoGZsESPxzNCWHY5FOtzP0
 
 const LINK_GUIA = "https://drive.google.com/file/d/1S8Tpwubt-P0L84ADLuAf9dBf4aLe_8M5/view";
 
+function montarRodape() {
+  return `
+    <div class="rodape">
+
+      <div class="centralizado">
+        <strong>Quer saber como enviar os documentos?</strong><br><br>
+        <a href="${LINK_GUIA}" target="_blank" class="guia-btn">
+          📄 Ver passo a passo
+        </a>
+      </div>
+
+      <br><br>
+
+      <strong>Observações importantes:</strong><br><br>
+
+      • Ingresso por vestibular/ENEM: apresentar apenas o Histórico do Ensino Médio.<br><br>
+
+      • Ingresso por transferência: apresentar o Histórico do Ensino Médio + Histórico da instituição de origem.<br><br>
+
+      • Ingresso por 2ª graduação: apresentar o Diploma do Ensino Superior + Histórico do Ensino Superior.
+
+    </div>
+  `;
+}
+
 function consultar() {
   const ra = document.getElementById("ra").value;
 
@@ -118,13 +149,17 @@ function consultar() {
     })
     .then(data => {
 
+      let html = "";
+
+      // 🔴 CASO ERRO (AGORA CORRETO)
       if (data.erro) {
-        document.getElementById("resultado").innerHTML =
-          "<p style='color:red;'>" + data.erro + "</p>";
+        html += `<p class="erro">${data.erro}</p>`;
+        html += montarRodape(); // 👈 AGORA SEMPRE MOSTRA
+        document.getElementById("resultado").innerHTML = html;
         return;
       }
 
-      let html = `
+      html += `
         <p><strong>RA:</strong> ${data.ra}</p>
         <p><strong>Curso:</strong> ${data.curso}</p>
       `;
@@ -147,35 +182,14 @@ function consultar() {
         html += `</table>`;
       }
 
-      // 🔥 RODAPÉ AJUSTADO
-      html += `
-        <div class="rodape">
-
-          <div class="centralizado">
-            <strong>Quer saber como enviar os documentos?</strong><br><br>
-            <a href="${LINK_GUIA}" target="_blank" class="guia-btn">
-              📄 Ver passo a passo
-            </a>
-          </div>
-
-          <br><br>
-
-          <strong>Observações importantes:</strong><br><br>
-
-          • Ingresso por vestibular/ENEM: apresentar apenas o Histórico do Ensino Médio.<br><br>
-
-          • Ingresso por transferência: apresentar o Histórico do Ensino Médio + Histórico da instituição de origem.<br><br>
-
-          • Ingresso por 2ª graduação: apresentar o Diploma do Ensino Superior + Histórico do Ensino Superior.
-
-        </div>
-      `;
+      // 🔥 RODAPÉ SEMPRE
+      html += montarRodape();
 
       document.getElementById("resultado").innerHTML = html;
     })
     .catch(err => {
       document.getElementById("resultado").innerHTML =
-        "<p style='color:red;'>Erro ao consultar. Verifique a API.</p>";
+        "<p class='erro'>Erro ao consultar. Verifique a API.</p>";
       console.error(err);
     });
 }
