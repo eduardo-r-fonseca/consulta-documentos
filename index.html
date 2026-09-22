@@ -86,6 +86,17 @@ th {
   border-radius: 6px;
   font-weight: bold;
 }
+
+.aviso {
+  font-size: 13px;
+  color: #555;
+  background: #eef4ff;
+  border: 1px solid #cfe0ff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 10px 0 15px 0;
+  text-align: left;
+}
 </style>
 </head>
 
@@ -95,7 +106,11 @@ th {
   <h2>Centro Universitário Fundação de Ensino Octávio Bastos - UNIFEOB</h2>
   <p>Consulta de Documentos Pendentes para Veteranos</p>
 
-  <input id="ra" placeholder="Digite seu RA">
+  <p class="aviso">
+    Você pode pesquisar pelo seu <strong>RA</strong>, <strong>CPF</strong> (com ou sem pontuação) ou <strong>Nome completo</strong>.
+  </p>
+
+  <input id="busca" placeholder="Digite seu RA, CPF ou Nome completo">
   <br>
   <button onclick="consultar()">Consultar</button>
 
@@ -133,16 +148,16 @@ function montarRodape() {
 }
 
 function consultar() {
-  const ra = document.getElementById("ra").value;
+  const busca = document.getElementById("busca").value.trim();
 
-  if (!ra) {
-    alert("Digite o RA");
+  if (!busca) {
+    alert("Digite seu RA, CPF ou Nome completo");
     return;
   }
 
   document.getElementById("resultado").innerHTML = "Carregando...";
 
-  fetch(API + "?ra=" + ra)
+  fetch(API + "?busca=" + encodeURIComponent(busca))
     .then(res => {
       if (!res.ok) throw new Error("Erro na API");
       return res.json();
@@ -151,7 +166,7 @@ function consultar() {
 
       let html = "";
 
-      // 🔴 CASO ERRO (AGORA CORRETO)
+      // 🔴 CASO ERRO
       if (data.erro) {
         html += `<p class="erro">${data.erro}</p>`;
         html += montarRodape(); // 👈 AGORA SEMPRE MOSTRA
@@ -161,6 +176,7 @@ function consultar() {
 
       html += `
         <p><strong>RA:</strong> ${data.ra}</p>
+        <p><strong>Nome:</strong> ${data.nome || ""}</p>
         <p><strong>Curso:</strong> ${data.curso}</p>
       `;
 
